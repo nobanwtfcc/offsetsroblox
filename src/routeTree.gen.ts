@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as F4HBNFHRVB34RouteImport } from './routes/F4HBNFHRVB34'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicOffsetsDothppRouteImport } from './routes/api/public/offsets[.]hpp'
 
@@ -22,6 +23,11 @@ const AuthRoute = AuthRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const F4HBNFHRVB34Route = F4HBNFHRVB34RouteImport.update({
+  id: '/F4HBNFHRVB34',
+  path: '/F4HBNFHRVB34',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const ApiPublicOffsetsDothppRoute = ApiPublicOffsetsDothppRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/F4HBNFHRVB34': typeof F4HBNFHRVB34Route
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/api/public/offsets.hpp': typeof ApiPublicOffsetsDothppRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/F4HBNFHRVB34': typeof F4HBNFHRVB34Route
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/api/public/offsets.hpp': typeof ApiPublicOffsetsDothppRoute
@@ -50,20 +58,33 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/F4HBNFHRVB34': typeof F4HBNFHRVB34Route
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/api/public/offsets.hpp': typeof ApiPublicOffsetsDothppRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/auth' | '/api/public/offsets.hpp'
+  fullPaths:
+    | '/'
+    | '/F4HBNFHRVB34'
+    | '/admin'
+    | '/auth'
+    | '/api/public/offsets.hpp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/auth' | '/api/public/offsets.hpp'
-  id: '__root__' | '/' | '/admin' | '/auth' | '/api/public/offsets.hpp'
+  to: '/' | '/F4HBNFHRVB34' | '/admin' | '/auth' | '/api/public/offsets.hpp'
+  id:
+    | '__root__'
+    | '/'
+    | '/F4HBNFHRVB34'
+    | '/admin'
+    | '/auth'
+    | '/api/public/offsets.hpp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  F4HBNFHRVB34Route: typeof F4HBNFHRVB34Route
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   ApiPublicOffsetsDothppRoute: typeof ApiPublicOffsetsDothppRoute
@@ -85,6 +106,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/F4HBNFHRVB34': {
+      id: '/F4HBNFHRVB34'
+      path: '/F4HBNFHRVB34'
+      fullPath: '/F4HBNFHRVB34'
+      preLoaderRoute: typeof F4HBNFHRVB34RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +132,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  F4HBNFHRVB34Route: F4HBNFHRVB34Route,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   ApiPublicOffsetsDothppRoute: ApiPublicOffsetsDothppRoute,
@@ -111,3 +140,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
